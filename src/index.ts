@@ -1680,7 +1680,7 @@ const statsPage = `
     <div id="apiKeySection" class="api-key-form">
       <h3>Enter Your API Key</h3>
       <p>Enter your reporting API key to access analytics data.</p>
-      <input type="text" id="apiKeyInput" placeholder="RYLS-" value="RYLS-" autofocus>
+      <input type="password" id="apiKeyInput" placeholder="RYLS-" value="RYLS-" autofocus>
       <button id="loadDataButton">Load Dashboard</button>
     </div>
     
@@ -1691,31 +1691,17 @@ const statsPage = `
       </div>
       
       <div class="dashboard-grid" id="deviceMetricsGrid">
-        <!-- OS Name Chart -->
+        <!-- OS Combined Chart -->
         <div class="chart-card">
           <div class="chart-header">
             <div class="chart-title">Operating System Distribution</div>
             <div class="toggle-buttons">
-              <button class="toggle-button active" data-chart-type="bar" data-target="osNameChart">Bar</button>
-              <button class="toggle-button" data-chart-type="pie" data-target="osNameChart">Pie</button>
+              <button class="toggle-button active" data-chart-type="bar" data-target="osCombinedChart">Bar</button>
+              <button class="toggle-button" data-chart-type="pie" data-target="osCombinedChart">Pie</button>
             </div>
           </div>
           <div class="chart-container">
-            <canvas id="osNameChart"></canvas>
-          </div>
-        </div>
-        
-        <!-- OS Version Chart -->
-        <div class="chart-card">
-          <div class="chart-header">
-            <div class="chart-title">OS Version Distribution</div>
-            <div class="toggle-buttons">
-              <button class="toggle-button active" data-chart-type="bar" data-target="osVersionChart">Bar</button>
-              <button class="toggle-button" data-chart-type="pie" data-target="osVersionChart">Pie</button>
-            </div>
-          </div>
-          <div class="chart-container">
-            <canvas id="osVersionChart"></canvas>
+            <canvas id="osCombinedChart"></canvas>
           </div>
         </div>
         
@@ -2060,22 +2046,12 @@ const statsPage = `
     
     // Initialize device metrics charts
     function initializeCharts(data) {
-      // OS Name Chart
-      createChart('osNameChart', 'bar', {
-        labels: data.os_name.map(item => formatLabel(item.os_name)),
+      // OS Combined Chart
+      createChart('osCombinedChart', 'bar', {
+        labels: data.os_combined.map(item => formatLabel(item.os_combined)),
         datasets: [{
           label: 'Count',
-          data: data.os_name.map(item => item.count),
-          backgroundColor: chartColors
-        }]
-      });
-      
-      // OS Version Chart
-      createChart('osVersionChart', 'bar', {
-        labels: data.os_version.map(item => formatLabel(item.os_version)),
-        datasets: [{
-          label: 'Count',
-          data: data.os_version.map(item => item.count),
+          data: data.os_combined.map(item => item.count),
           backgroundColor: chartColors
         }]
       });
@@ -2677,11 +2653,8 @@ async function handleReport(request: Request, env: Env): Promise<Response> {
             });
         }
 
-    if (pathname === '/report/os_name') {
-      const { results } = await env.DB.prepare('SELECT os_name, SUM(count) AS count FROM device_stats GROUP BY os_name').all();
-      return new Response(JSON.stringify(results), { status: 200, headers: { 'Content-Type': 'application/json' } });
-    } else if (pathname === '/report/os_version') {
-      const { results } = await env.DB.prepare('SELECT os_version, SUM(count) AS count FROM device_stats GROUP BY os_version').all();
+    if (pathname === '/report/os_combined') {
+      const { results } = await env.DB.prepare('SELECT os_combined, SUM(count) AS count FROM device_stats GROUP BY os_combined').all();
       return new Response(JSON.stringify(results), { status: 200, headers: { 'Content-Type': 'application/json' } });
     } else if (pathname === '/report/device_brand') {
       const { results } = await env.DB.prepare('SELECT device_brand, SUM(count) AS count FROM device_stats GROUP BY device_brand').all();
@@ -2703,11 +2676,10 @@ async function handleReport(request: Request, env: Env): Promise<Response> {
         return new Response(JSON.stringify(results), { status: 200, headers: { 'Content-Type': 'application/json' } });
     } else if (pathname === '/report/combined') {
        const [
-            os_name, os_version, device_type, device_model, device_brand,
+            os_combined, device_type, device_model, device_brand,
             network_type, device_language, push_notification_enabled, install_date
         ] = await Promise.all([
-            env.DB.prepare('SELECT os_name, SUM(count) as count FROM device_stats GROUP BY os_name').all(),
-            env.DB.prepare('SELECT os_version, SUM(count) as count FROM device_stats GROUP BY os_version').all(),
+            env.DB.prepare('SELECT os_combined, SUM(count) as count FROM device_stats GROUP BY os_combined').all(),
             env.DB.prepare('SELECT device_type, SUM(count) as count FROM device_stats GROUP BY device_type').all(),
             env.DB.prepare('SELECT device_model, SUM(count) as count FROM device_stats GROUP BY device_model').all(),
             env.DB.prepare('SELECT device_brand, SUM(count) as count FROM device_stats GROUP BY device_brand').all(),
@@ -2718,8 +2690,7 @@ async function handleReport(request: Request, env: Env): Promise<Response> {
         ]);
 
         const response = {
-            os_name: os_name.results,
-            os_version: os_version.results,
+            os_combined: os_combined.results,
             device_type: device_type.results,
             device_model: device_model.results,
             device_brand: device_brand.results,
