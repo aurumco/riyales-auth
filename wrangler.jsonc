@@ -1,0 +1,17 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "riyales-auth",
+	"main": "src/index.ts",
+	"compatibility_date": "2025-06-10",
+	"observability": {
+		"enabled": true
+	},
+	// D1 Database Binding
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "riyales-db",
+			"database_id": "a1a9c36e-963f-42e6-9a58-75623c019563"
+		}
+	]
+}

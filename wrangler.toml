@@ -1,0 +1,8 @@
+name = "riyales-auth"
+main = "src/index.ts"
+compatibility_date = "2025-06-10"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "user-agents-db"
+database_id = "f4eca01d-6ebb-4ea0-b755-e8033cf75404"
