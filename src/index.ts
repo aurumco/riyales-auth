@@ -1785,6 +1785,15 @@ const statsPage = `
         <!-- Event Type Charts will be added dynamically -->
       </div>
 
+      <h2>Bourse Event Tracking</h2>
+      <div class="section-header">
+        <p>Analysis of bourse-related user interactions and tab visits within the bourse section.</p>
+      </div>
+
+      <div class="dashboard-grid" id="bourseEventTrackingGrid">
+        <!-- Bourse Event Type Charts will be added dynamically -->
+      </div>
+
       <h2>Error Reporting</h2>
       <div class="section-header">
         <p>Overview of application errors and crash reports.</p>
@@ -1992,6 +2001,7 @@ const statsPage = `
         const results = await Promise.all([
           fetchData('/report/combined', apiKey).catch(e => { console.error("Failed to fetch combined data:", e); return null; }),
           fetchData('/report/event_type', apiKey).catch(e => { console.error("Failed to fetch event types:", e); return null; }),
+          fetchData('/report/bourse_event_type', apiKey).catch(e => { console.error("Failed to fetch bourse event types:", e); return null; }),
           fetchData('/report/error_code', apiKey).catch(e => { console.error("Failed to fetch error codes:", e); return null; }),
           fetchData('/report/error_cause', apiKey).catch(e => { console.error("Failed to fetch error causes:", e); return null; }),
           fetchData('/report/app_version', apiKey).catch(e => { console.error("Failed to fetch app versions:", e); return null; })
@@ -2000,6 +2010,7 @@ const statsPage = `
         const [
             combinedData,
             eventTypeData,
+            bourseEventTypeData,
             errorCodeData,
             errorCauseData,
             appVersionData
@@ -2022,6 +2033,12 @@ const statsPage = `
           await initializeEventCharts(eventTypeData);
         } else {
           document.getElementById('eventTrackingGrid').innerHTML = '<div class="no-data-card">No event data available.</div>';
+        }
+
+        if (bourseEventTypeData && bourseEventTypeData.length > 0) {
+          await initializeBourseEventCharts(bourseEventTypeData);
+        } else {
+          document.getElementById('bourseEventTrackingGrid').innerHTML = '<div class="no-data-card">No bourse event data available.</div>';
         }
 
         initializeErrorCharts(errorCodeData, errorCauseData, appVersionData);
@@ -2127,10 +2144,16 @@ const statsPage = `
       eventTrackingGrid.innerHTML = '';
       const apiKey = document.getElementById('apiKeyInput').value.trim();
 
-      // Create a chart card for each event type
+      // Create a chart card for each event type (excluding bourse events)
       for (let i = 0; i < data.length; i++) {
         const event = data[i];
         const eventType = event.event_type;
+        
+        // Skip bourse events as they have their own section
+        if (eventType.startsWith('bourse_')) {
+          continue;
+        }
+        
         const canvasId = 'eventChart_' + i;
         const chartCard = document.createElement('div');
         chartCard.className = 'chart-card';
@@ -2210,6 +2233,100 @@ const statsPage = `
           }
         } catch (e) {
           console.error('Failed to create event chart:', e);
+          chartCard.querySelector('.chart-container').innerHTML = '<div class="no-data-in-card">Error Creating Chart</div>';
+        }
+      }
+    }
+
+    // Initialize bourse event tracking charts
+    async function initializeBourseEventCharts(data) {
+      const bourseEventTrackingGrid = document.getElementById('bourseEventTrackingGrid');
+      bourseEventTrackingGrid.innerHTML = '';
+      const apiKey = document.getElementById('apiKeyInput').value.trim();
+
+      // Create a chart card for each bourse event type
+      for (let i = 0; i < data.length; i++) {
+        const event = data[i];
+        const eventType = event.event_type;
+        const canvasId = 'bourseEventChart_' + i;
+        const chartCard = document.createElement('div');
+        chartCard.className = 'chart-card';
+
+        const chartTitle = formatLabel(eventType.replace('bourse_', '')) + ' Events';
+
+        // Create the card structure
+        chartCard.innerHTML =
+          '<div class="chart-header">' +
+            '<div class="chart-title">' + chartTitle + '</div>' +
+            '<div class="toggle-buttons">' +
+              '<button class="toggle-button active" data-chart-type="bar" data-target="' + canvasId + '">Bar</button>' +
+              '<button class="toggle-button" data-chart-type="pie" data-target="' + canvasId + '">Pie</button>' +
+            '</div>' +
+          '</div>' +
+          '<div class="chart-container">' +
+            '<canvas id="' + canvasId + '"></canvas>' +
+          '</div>';
+
+        bourseEventTrackingGrid.appendChild(chartCard);
+
+        // Add event listeners for chart type toggle
+        chartCard.querySelectorAll('.toggle-button').forEach(button => {
+          button.addEventListener('click', () => {
+            const chartType = button.getAttribute('data-chart-type');
+            const targetChart = button.getAttribute('data-target');
+            const chartGroup = button.closest('.toggle-buttons');
+
+            chartGroup.querySelectorAll('.toggle-button').forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            updateChartType(targetChart, chartType);
+          });
+        });
+
+        // Create the chart with appropriate data
+        try {
+          // For bourse_tab_visit, fetch detailed data
+          const keyMap = {
+              'bourse_tab_visit': 'tab_id',
+              'bourse_button_click': 'button'
+          };
+
+          if (keyMap[eventType]) {
+            try {
+              const detailData = await fetchData('/report/event_detail?type=' + eventType + '&key=' + keyMap[eventType], apiKey);
+
+              if (detailData && detailData.length > 0) {
+                // Update chart title
+                chartCard.querySelector('.chart-title').textContent = formatLabel(eventType.replace('bourse_', '')) + ' Distribution';
+
+                // Create chart
+                createChart(canvasId, 'bar', {
+                  labels: detailData.map(item => formatLabel(item.value)),
+                  datasets: [{
+                    label: eventType === 'bourse_tab_visit' ? 'Visits' : 'Clicks',
+                    data: detailData.map(item => item.count),
+                    backgroundColor: chartColors
+                  }]
+                });
+              } else {
+                chartCard.querySelector('.chart-container').innerHTML = '<div class="no-data-in-card">No Detailed Data</div>';
+              }
+            } catch (e) {
+              console.error('Failed to fetch bourse event details:', e);
+              chartCard.querySelector('.chart-container').innerHTML = '<div class="no-data-in-card">Error Loading Details</div>';
+            }
+          } else {
+            // For other bourse event types, use simple count
+            createChart(canvasId, 'bar', {
+              labels: [formatLabel(eventType.replace('bourse_', ''))],
+              datasets: [{
+                label: 'Count',
+                data: [event.count],
+                backgroundColor: chartColors
+              }]
+            });
+          }
+        } catch (e) {
+          console.error('Failed to create bourse event chart:', e);
           chartCard.querySelector('.chart-container').innerHTML = '<div class="no-data-in-card">Error Creating Chart</div>';
         }
       }
@@ -2498,10 +2615,11 @@ async function handleDeviceInfo(request: Request, env: Env, body: any): Promise<
 	const osVersion = body.os_version || parser.getOS().version || 'Unknown';
 
 	// Combine OS name and version into a single field
-	const os_combined = `${osName} ${osVersion}`.trim();
+	const osCombined = `${osName} ${osVersion}`.trim();
 
 	const data = {
-		os_combined: os_combined,
+		os_name: osCombined,
+		os_version: '-', // This column is no longer used for versioning
 		device_type: body.device_type || parser.getDevice().type || 'Unknown',
 		device_model: body.device_model || parser.getDevice().model || 'Unknown',
 		device_brand: body.device_brand || parser.getDevice().vendor || 'Unknown',
@@ -2519,14 +2637,15 @@ async function handleDeviceInfo(request: Request, env: Env, body: any): Promise<
 			`
       UPDATE device_stats
       SET count = count + 1
-      WHERE os_combined = ? AND device_type = ? AND device_model = ?
+      WHERE os_name = ? AND os_version = ? AND device_type = ? AND device_model = ?
             AND device_brand = ? AND network_type = ? AND device_language = ?
             AND push_notification_enabled = ? AND install_date = ?
       RETURNING count
     `,
 		)
 			.bind(
-				data.os_combined,
+				data.os_name,
+				data.os_version,
 				data.device_type,
 				data.device_model,
 				data.device_brand,
@@ -2542,13 +2661,14 @@ async function handleDeviceInfo(request: Request, env: Env, body: any): Promise<
 			await env.DB.prepare(
 				`
         INSERT INTO device_stats (
-          os_combined, device_type, device_model, device_brand,
+          os_name, os_version, device_type, device_model, device_brand,
           network_type, device_language, push_notification_enabled, install_date, count
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1)
       `,
 			)
 				.bind(
-					data.os_combined,
+					data.os_name,
+					data.os_version,
 					data.device_type,
 					data.device_model,
 					data.device_brand,
@@ -2704,8 +2824,8 @@ async function handleReport(request: Request, env: Env): Promise<Response> {
 			const { results } = await env.DB.prepare('SELECT os_name, SUM(count) AS count FROM device_stats GROUP BY os_name').all();
 			return new Response(JSON.stringify(results), { status: 200, headers: { 'Content-Type': 'application/json' } });
 		} else if (pathname === '/report/os_version') {
-			const { results } = await env.DB.prepare('SELECT os_version, SUM(count) AS count FROM device_stats GROUP BY os_version').all();
-			return new Response(JSON.stringify(results), { status: 200, headers: { 'Content-Type': 'application/json' } });
+			// This endpoint is obsolete as os_version is no longer stored separately.
+			return new Response(JSON.stringify([]), { status: 200, headers: { 'Content-Type': 'application/json' } });
 		} else if (pathname === '/report/device_brand') {
 			const { results } = await env.DB.prepare('SELECT device_brand, SUM(count) AS count FROM device_stats GROUP BY device_brand').all();
 			return new Response(JSON.stringify(results), { status: 200, headers: { 'Content-Type': 'application/json' } });
@@ -2714,6 +2834,9 @@ async function handleReport(request: Request, env: Env): Promise<Response> {
 			return new Response(JSON.stringify(results), { status: 200, headers: { 'Content-Type': 'application/json' } });
 		} else if (pathname === '/report/event_type') {
 			const { results } = await env.DB.prepare('SELECT event_type, SUM(count) as count FROM event_stats GROUP BY event_type').all();
+			return new Response(JSON.stringify(results), { status: 200, headers: { 'Content-Type': 'application/json' } });
+		} else if (pathname === '/report/bourse_event_type') {
+			const { results } = await env.DB.prepare('SELECT event_type, SUM(count) as count FROM event_stats WHERE event_type LIKE "bourse_%" GROUP BY event_type').all();
 			return new Response(JSON.stringify(results), { status: 200, headers: { 'Content-Type': 'application/json' } });
 		} else if (pathname === '/report/error_code') {
 			const { results } = await env.DB.prepare('SELECT error_code, COUNT(*) as count FROM app_errors GROUP BY error_code').all();
@@ -2727,7 +2850,6 @@ async function handleReport(request: Request, env: Env): Promise<Response> {
 		} else if (pathname === '/report/combined') {
 			const [
 				os_name,
-				os_version,
 				device_type,
 				device_model,
 				device_brand,
@@ -2737,7 +2859,6 @@ async function handleReport(request: Request, env: Env): Promise<Response> {
 				install_date,
 			] = await Promise.all([
 				env.DB.prepare('SELECT os_name, SUM(count) as count FROM device_stats GROUP BY os_name').all(),
-				env.DB.prepare('SELECT os_version, SUM(count) as count FROM device_stats GROUP BY os_version').all(),
 				env.DB.prepare('SELECT device_type, SUM(count) as count FROM device_stats GROUP BY device_type').all(),
 				env.DB.prepare('SELECT device_model, SUM(count) as count FROM device_stats GROUP BY device_model').all(),
 				env.DB.prepare('SELECT device_brand, SUM(count) as count FROM device_stats GROUP BY device_brand').all(),
@@ -2749,7 +2870,7 @@ async function handleReport(request: Request, env: Env): Promise<Response> {
 
 			const response = {
 				os_name: os_name.results,
-				os_version: os_version.results,
+				os_version: [], // Obsolete
 				device_type: device_type.results,
 				device_model: device_model.results,
 				device_brand: device_brand.results,
