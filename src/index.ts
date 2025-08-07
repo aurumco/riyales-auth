@@ -1691,10 +1691,10 @@ const statsPage = `
       </div>
 
       <div class="dashboard-grid" id="deviceMetricsGrid">
-        <!-- OS Name Chart -->
+        <!-- OS & Version Distribution Chart -->
         <div class="chart-card">
           <div class="chart-header">
-            <div class="chart-title">Operating System Distribution</div>
+            <div class="chart-title">OS & Version Distribution</div>
             <div class="toggle-buttons">
               <button class="toggle-button active" data-chart-type="bar" data-target="osNameChart">Bar</button>
               <button class="toggle-button" data-chart-type="pie" data-target="osNameChart">Pie</button>
@@ -1702,20 +1702,6 @@ const statsPage = `
           </div>
           <div class="chart-container">
             <canvas id="osNameChart"></canvas>
-          </div>
-        </div>
-
-        <!-- OS Version Chart -->
-        <div class="chart-card">
-          <div class="chart-header">
-            <div class="chart-title">OS Version Distribution</div>
-            <div class="toggle-buttons">
-              <button class="toggle-button active" data-chart-type="bar" data-target="osVersionChart">Bar</button>
-              <button class="toggle-button" data-chart-type="pie" data-target="osVersionChart">Pie</button>
-            </div>
-          </div>
-          <div class="chart-container">
-            <canvas id="osVersionChart"></canvas>
           </div>
         </div>
 
@@ -2079,20 +2065,10 @@ const statsPage = `
     function initializeCharts(data) {
       // OS Name Chart
       createChart('osNameChart', 'bar', {
-        labels: data.os_name.map(item => formatLabel(item.os_name)),
+        labels: data.os_distribution.map(item => formatLabel(item.os_combined)),
         datasets: [{
           label: 'Count',
-          data: data.os_name.map(item => item.count),
-          backgroundColor: chartColors
-        }]
-      });
-
-      // OS Version Chart
-      createChart('osVersionChart', 'bar', {
-        labels: data.os_version.map(item => formatLabel(item.os_version)),
-        datasets: [{
-          label: 'Count',
-          data: data.os_version.map(item => item.count),
+          data: data.os_distribution.map(item => item.count),
           backgroundColor: chartColors
         }]
       });
@@ -2148,12 +2124,12 @@ const statsPage = `
       for (let i = 0; i < data.length; i++) {
         const event = data[i];
         const eventType = event.event_type;
-        
+
         // Skip bourse events as they have their own section
         if (eventType.startsWith('bourse_')) {
           continue;
         }
-        
+
         const canvasId = 'eventChart_' + i;
         const chartCard = document.createElement('div');
         chartCard.className = 'chart-card';
@@ -2609,21 +2585,17 @@ export default {
 async function handleDeviceInfo(request: Request, env: Env, body: any): Promise<Response> {
 	const userAgent = request.headers.get('User-Agent') || 'Unknown';
 	const parser = new UAParser(userAgent);
-
-	// Get OS name and version separately
 	const osName = body.os_name || parser.getOS().name || 'Unknown';
 	const osVersion = body.os_version || parser.getOS().version || 'Unknown';
 
-	// Combine OS name and version into a single field
-	const osCombined = `${osName} ${osVersion}`.trim();
-
+	const networkType = (body.network_type || 'Unknown').replace(/\]$/, '');
 	const data = {
-		os_name: osCombined,
-		os_version: '-', // This column is no longer used for versioning
+		os_name: osName,
+		os_version: osVersion,
 		device_type: body.device_type || parser.getDevice().type || 'Unknown',
 		device_model: body.device_model || parser.getDevice().model || 'Unknown',
 		device_brand: body.device_brand || parser.getDevice().vendor || 'Unknown',
-		network_type: body.network_type || 'Unknown',
+		network_type: networkType,
 		device_language: body.device_language || 'Unknown',
 		push_notification_enabled: body.push_notification_enabled ? 1 : 0,
 		install_date: body.install_timestamp
@@ -2820,23 +2792,28 @@ async function handleReport(request: Request, env: Env): Promise<Response> {
 			});
 		}
 
-		if (pathname === '/report/os_name') {
-			const { results } = await env.DB.prepare('SELECT os_name, SUM(count) AS count FROM device_stats GROUP BY os_name').all();
+		if (pathname === '/report/os_distribution') {
+			const { results } = await env.DB.prepare(
+				"SELECT (os_name || ' ' || os_version) as os_combined, SUM(count) as count FROM device_stats WHERE os_name != 'Unknown' GROUP BY os_name, os_version",
+			).all();
 			return new Response(JSON.stringify(results), { status: 200, headers: { 'Content-Type': 'application/json' } });
-		} else if (pathname === '/report/os_version') {
-			// This endpoint is obsolete as os_version is no longer stored separately.
-			return new Response(JSON.stringify([]), { status: 200, headers: { 'Content-Type': 'application/json' } });
 		} else if (pathname === '/report/device_brand') {
-			const { results } = await env.DB.prepare('SELECT device_brand, SUM(count) AS count FROM device_stats GROUP BY device_brand').all();
+			const { results } = await env.DB.prepare(
+				"SELECT device_brand, SUM(count) AS count FROM device_stats WHERE device_brand != 'Unknown' GROUP BY device_brand",
+			).all();
 			return new Response(JSON.stringify(results), { status: 200, headers: { 'Content-Type': 'application/json' } });
 		} else if (pathname === '/report/network_type') {
-			const { results } = await env.DB.prepare('SELECT network_type, SUM(count) AS count FROM device_stats GROUP BY network_type').all();
+			const { results } = await env.DB.prepare(
+				"SELECT network_type, SUM(count) AS count FROM device_stats WHERE network_type != 'Unknown' GROUP BY network_type",
+			).all();
 			return new Response(JSON.stringify(results), { status: 200, headers: { 'Content-Type': 'application/json' } });
 		} else if (pathname === '/report/event_type') {
 			const { results } = await env.DB.prepare('SELECT event_type, SUM(count) as count FROM event_stats GROUP BY event_type').all();
 			return new Response(JSON.stringify(results), { status: 200, headers: { 'Content-Type': 'application/json' } });
 		} else if (pathname === '/report/bourse_event_type') {
-			const { results } = await env.DB.prepare('SELECT event_type, SUM(count) as count FROM event_stats WHERE event_type LIKE "bourse_%" GROUP BY event_type').all();
+			const { results } = await env.DB.prepare(
+				'SELECT event_type, SUM(count) as count FROM event_stats WHERE event_type LIKE "bourse_%" GROUP BY event_type',
+			).all();
 			return new Response(JSON.stringify(results), { status: 200, headers: { 'Content-Type': 'application/json' } });
 		} else if (pathname === '/report/error_code') {
 			const { results } = await env.DB.prepare('SELECT error_code, COUNT(*) as count FROM app_errors GROUP BY error_code').all();
@@ -2849,7 +2826,7 @@ async function handleReport(request: Request, env: Env): Promise<Response> {
 			return new Response(JSON.stringify(results), { status: 200, headers: { 'Content-Type': 'application/json' } });
 		} else if (pathname === '/report/combined') {
 			const [
-				os_name,
+				os_distribution,
 				device_type,
 				device_model,
 				device_brand,
@@ -2858,18 +2835,28 @@ async function handleReport(request: Request, env: Env): Promise<Response> {
 				push_notification_enabled,
 				install_date,
 			] = await Promise.all([
-				env.DB.prepare('SELECT os_name, SUM(count) as count FROM device_stats GROUP BY os_name').all(),
-				env.DB.prepare('SELECT device_type, SUM(count) as count FROM device_stats GROUP BY device_type').all(),
+				env.DB.prepare(
+					"SELECT (os_name || ' ' || os_version) as os_combined, SUM(count) as count FROM device_stats WHERE os_name != 'Unknown' GROUP BY os_name, os_version",
+				).all(),
+				env.DB.prepare(
+					"SELECT device_type, SUM(count) as count FROM device_stats WHERE device_type != 'Unknown' GROUP BY device_type",
+				).all(),
 				env.DB.prepare('SELECT device_model, SUM(count) as count FROM device_stats GROUP BY device_model').all(),
-				env.DB.prepare('SELECT device_brand, SUM(count) as count FROM device_stats GROUP BY device_brand').all(),
-				env.DB.prepare('SELECT network_type, SUM(count) as count FROM device_stats GROUP BY network_type').all(),
-				env.DB.prepare('SELECT device_language, SUM(count) as count FROM device_stats GROUP BY device_language').all(),
+				env.DB.prepare(
+					"SELECT device_brand, SUM(count) as count FROM device_stats WHERE device_brand != 'Unknown' GROUP BY device_brand",
+				).all(),
+				env.DB.prepare(
+					"SELECT network_type, SUM(count) as count FROM device_stats WHERE network_type != 'Unknown' GROUP BY network_type",
+				).all(),
+				env.DB.prepare(
+					"SELECT device_language, SUM(count) as count FROM device_stats WHERE device_language != 'Unknown' GROUP BY device_language",
+				).all(),
 				env.DB.prepare('SELECT push_notification_enabled, SUM(count) as count FROM device_stats GROUP BY push_notification_enabled').all(),
 				env.DB.prepare('SELECT install_date, SUM(count) as count FROM device_stats GROUP BY install_date').all(),
 			]);
 
 			const response = {
-				os_name: os_name.results,
+				os_distribution: os_distribution.results,
 				os_version: [], // Obsolete
 				device_type: device_type.results,
 				device_model: device_model.results,
