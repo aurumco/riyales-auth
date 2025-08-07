@@ -1680,7 +1680,7 @@ const statsPage = `
     <div id="apiKeySection" class="api-key-form">
       <h3>Enter Your API Key</h3>
       <p>Enter your reporting API key to access analytics data.</p>
-      <input type="password" id="apiKeyInput" placeholder="RYLS-" autofocus>
+      <input type="password" id="apiKeyInput" placeholder="RYLS-" value="RYLS-" autofocus>
       <button id="loadDataButton">Load Dashboard</button>
     </div>
     
