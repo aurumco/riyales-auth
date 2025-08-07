@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { UAParser } from 'ua-parser-js';
 
 interface Env {
-  DB: D1Database;
+	DB: D1Database;
 }
 
 const documentation = `
@@ -43,7 +43,7 @@ const documentation = `
       --method-post: rgb(0, 90, 227);
       --warning-color: rgb(255, 50, 65);
     }
-    
+
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', Helvetica, Arial, sans-serif;
       line-height: 1.5;
@@ -51,35 +51,35 @@ const documentation = `
       margin: 0;
       transition: background-color 0.3s ease, color 0.3s ease;
     }
-    
+
     body.light {
       background-color: var(--bg-color-light);
       color: var(--text-color-light);
     }
-    
+
     body.dark {
       background-color: var(--bg-color-dark);
       color: var(--text-color-dark);
     }
-    
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
-    
+
     .container {
       max-width: 1300px;
       margin: 0 auto;
       padding: 3rem;
     }
-    
+
     header {
       margin-bottom: 2rem;
       text-align: center;
       padding: 3rem 0;
     }
-    
+
     h1, h2, h3, h4, h5, h6, summary {
         font-family: 'Inter', sans-serif;
     }
@@ -90,7 +90,7 @@ const documentation = `
       margin-bottom: 0.5rem;
       letter-spacing: -0.02em;
     }
-    
+
     h2 {
       font-size: 1.8rem;
       font-weight: 600;
@@ -98,10 +98,10 @@ const documentation = `
       padding-bottom: 0.75rem;
       letter-spacing: -0.01em;
     }
-    
+
     body.light h2 { border-bottom: 1px solid var(--divider-color-light); }
     body.dark h2 { border-bottom: 1px solid var(--divider-color-dark); }
-    
+
     h3 {
       font-size: 1.25rem;
       font-weight: 600;
@@ -113,16 +113,16 @@ const documentation = `
       font-weight: 600;
       margin-bottom: 0.5rem;
     }
-    
+
     p {
       margin-bottom: 1rem;
     }
-    
+
     .subtitle {
       font-size: 1.25rem;
       margin-bottom: 2rem;
     }
-    
+
     body.light .subtitle { color: var(--secondary-color-light); }
     body.dark .subtitle { color: var(--secondary-color-dark); }
 
@@ -145,7 +145,7 @@ const documentation = `
       border: 1px solid var(--card-border-dark);
       box-shadow: 0 4px 24px rgba(0,0,0,0.2);
     }
-    
+
     .card ul {
         padding-left: 1.5rem;
     }
@@ -157,7 +157,7 @@ const documentation = `
       flex-wrap: wrap;
       gap: 0.5rem;
     }
-    
+
     .method {
       display: inline-block;
       padding: 0.25rem 0.75rem;
@@ -167,27 +167,27 @@ const documentation = `
       color: white;
       text-transform: uppercase;
     }
-    
+
     .method.get { background-color: var(--method-get); }
     .method.post { background-color: var(--method-post); }
-    
+
     .endpoint-path {
       font-family: 'SF Mono', SFMono-Regular, ui-monospace, monospace;
       font-size: 1rem;
       padding: 0.25rem 0.75rem;
       border-radius: 6px;
     }
-    
+
     body.light .endpoint-path { background-color: var(--code-bg-light); }
     body.dark .endpoint-path { background-color: var(--code-bg-dark); }
-    
+
     table {
       width: 100%;
       border-collapse: collapse;
       margin: 1rem 0;
       font-size: 0.9rem;
     }
-    
+
     th {
       text-align: left;
       padding: 0.75rem 1rem;
@@ -201,16 +201,16 @@ const documentation = `
       border-bottom: 1px solid var(--divider-color-dark);
       color: var(--secondary-color-dark);
     }
-    
+
     td {
       padding: 0.75rem 1rem;
       vertical-align: top;
     }
     body.light td { border-bottom: 1px solid var(--divider-color-light); }
     body.dark td { border-bottom: 1px solid var(--divider-color-dark); }
-    
+
     tr:last-child td { border-bottom: none; }
-    
+
     .code-block {
       position: relative;
       border-radius: 12px;
@@ -223,7 +223,7 @@ const documentation = `
     }
     body.light .code-block { background-color: var(--code-bg-light); }
     body.dark .code-block { background-color: var(--code-bg-dark); }
-    
+
     .copy-button {
       position: absolute;
       top: 0.75rem;
@@ -240,9 +240,9 @@ const documentation = `
       -webkit-backdrop-filter: blur(5px);
       color: white;
     }
-    
+
     .copy-button:hover { opacity: 1; }
-    
+
     .note {
       border-left: 3px solid var(--warning-color);
       padding: 1rem 1.5rem;
@@ -250,32 +250,32 @@ const documentation = `
       margin: 1rem 0;
       background-color: rgba(255, 69, 84, 0.1);
     }
-    
+
     .note h4 {
       color: var(--warning-color);
       margin-top: 0;
       margin-bottom: 0.5rem;
       font-size: 1rem;
     }
-    
+
     .parameter-table td:first-child {
       font-family: 'SF Mono', SFMono-Regular, ui-monospace, monospace;
       font-weight: 500;
     }
-    
+
     .parameter-table th:first-child, .parameter-table td:first-child { width: 25%; }
     .parameter-table th:nth-child(2), .parameter-table td:nth-child(2) { width: 15%; }
     .parameter-table th:nth-child(3), .parameter-table td:nth-child(3) { width: 15%; }
     .parameter-table th:nth-child(4), .parameter-table td:nth-child(4) { width: 45%; }
-    
+
     .required { color: var(--warning-color); }
     .optional {
       body.light & { color: var(--secondary-color-light); }
       body.dark & { color: var(--secondary-color-dark); }
     }
-    
+
     .endpoint-description { margin: 1rem 0; }
-    
+
     .tabs {
       display: flex;
       margin: 1rem 0 0;
@@ -290,25 +290,25 @@ const documentation = `
       font-weight: 500;
       margin-bottom: -1px;
     }
-    
+
     .tab.active {
       border-bottom: 2px solid var(--primary-color-dark);
     }
     body.light .tab.active { color: var(--primary-color-light); }
     body.dark .tab.active { color: var(--primary-color-dark); }
-    
+
     .tab-content {
       display: none;
       padding: 1rem 0;
       opacity: 0;
       transition: opacity 0.3s ease-in-out;
     }
-    
+
     .tab-content.active {
       display: block;
       opacity: 1;
     }
-    
+
     footer {
       text-align: center;
       padding: 2rem 0;
@@ -406,13 +406,13 @@ const documentation = `
         <li>For data collection endpoints (<code>/device</code>, <code>/event</code>, <code>/error</code>), use a key in format: <code>RYLS-UUID</code></li>
         <li>For reporting endpoints (<code>/report/*</code>), use key: <code>RYLS-0***</code></li>
       </ul>
-      
+
       <div class="note">
         <h4>Important</h4>
         <p>API Keys for data collection endpoints must follow the format <code>RYLS-</code> followed by a valid UUID v4 (e.g., <code>RYLS-123e4567-e89b-12d3-a456-426614174000</code>). The reporting key is a static value provided to authorized users.</p>
       </div>
     </div>
-    
+
     <h2>Data Collection Endpoints</h2>
     <div class="card">
       <p>These endpoints are used to submit data to the Riyales system. All are POST requests and require a valid <code>RYLS-UUID</code> API key.</p>
@@ -446,11 +446,11 @@ const documentation = `
         <span class="method post">POST</span>
         <span class="endpoint-path">/device</span>
       </div>
-      
+
       <div class="endpoint-description">
         <p>Records device information and increases the count for this device profile in the database.</p>
       </div>
-      
+
       <h3>Headers</h3>
       <table class="parameter-table">
         <tr>
@@ -478,7 +478,7 @@ const documentation = `
           <td>Browser/device user agent</td>
         </tr>
       </table>
-      
+
       <h3>Request Parameters</h3>
       <table class="parameter-table">
         <tr>
@@ -542,7 +542,7 @@ const documentation = `
           <td>Timestamp of app installation (ISO 8601 format)</td>
         </tr>
       </table>
-      
+
       <div class="accordion" style="border-top: none; margin-top: 1.5rem;">
         <div class="accordion-item">
             <div class="accordion-header" onclick="toggleAccordion(this)">
@@ -604,18 +604,18 @@ const documentation = `
         </div>
       </div>
     </div>
-    
+
     <!-- Event endpoint -->
     <div class="card">
       <div class="endpoint-header">
         <span class="method post">POST</span>
         <span class="endpoint-path">/event</span>
       </div>
-      
+
       <div class="endpoint-description">
         <p>Records an event occurrence and increases its count in the database.</p>
       </div>
-      
+
       <h3>Headers</h3>
       <table class="parameter-table">
         <tr>
@@ -637,7 +637,7 @@ const documentation = `
           <td>RYLS-UUID format</td>
         </tr>
       </table>
-      
+
       <h3>Request Parameters</h3>
       <table class="parameter-table">
         <tr>
@@ -767,18 +767,18 @@ const documentation = `
         </div>
       </div>
     </div>
-    
+
     <!-- Error endpoint -->
     <div class="card">
       <div class="endpoint-header">
         <span class="method post">POST</span>
         <span class="endpoint-path">/error</span>
       </div>
-      
+
       <div class="endpoint-description">
         <p>Logs application errors for later analysis.</p>
       </div>
-      
+
       <h3>Headers</h3>
       <table class="parameter-table">
         <tr>
@@ -800,7 +800,7 @@ const documentation = `
           <td>RYLS-UUID format</td>
         </tr>
       </table>
-      
+
       <h3>Request Parameters</h3>
       <table class="parameter-table">
         <tr>
@@ -874,7 +874,7 @@ const documentation = `
         <h4>Batch Error Support</h4>
         <p>You can send a single error object or an array of errors in the request body. For batch, use an array or an <code>{ errors: [...] }</code> object.</p>
       </div>
-      
+
       <div class="accordion" style="border-top: none; margin-top: 1.5rem;">
         <div class="accordion-item">
             <div class="accordion-header" onclick="toggleAccordion(this)">
@@ -984,7 +984,7 @@ const documentation = `
         <p>All report endpoints require the API key <code>RYLS-0***</code> in the X-API-Key header.</p>
       </div>
       <p>These endpoints provide aggregated and filterable data. Click an endpoint to see examples.</p>
-      
+
       <h3>Headers</h3>
         <table class="parameter-table">
             <tr>
@@ -1003,7 +1003,7 @@ const documentation = `
 
       <h3 style="margin-top: 2.5rem;">Aggregated Reports</h3>
       <div class="accordion">
-        
+
         <div class="accordion-item">
             <div class="accordion-header" onclick="toggleAccordion(this)"><div class="accordion-title"><span class="method get">GET</span><code>/report/os_name</code><span class="description">Total count per OS name.</span></div><div class="accordion-toggle">+</div></div>
             <div class="accordion-content"><div class="accordion-content-inner">
@@ -1039,7 +1039,7 @@ const documentation = `
 ]</code></pre></div>
             </div></div>
         </div>
-        
+
         <div class="accordion-item">
             <div class="accordion-header" onclick="toggleAccordion(this)"><div class="accordion-title"><span class="method get">GET</span><code>/report/network_type</code><span class="description">Total count per network type.</span></div><div class="accordion-toggle">+</div></div>
             <div class="accordion-content"><div class="accordion-content-inner">
@@ -1051,7 +1051,7 @@ const documentation = `
 ]</code></pre></div>
             </div></div>
         </div>
-        
+
         <div class="accordion-item">
             <div class="accordion-header" onclick="toggleAccordion(this)"><div class="accordion-title"><span class="method get">GET</span><code>/report/event_type</code><span class="description">Total count per event type.</span></div><div class="accordion-toggle">+</div></div>
             <div class="accordion-content"><div class="accordion-content-inner">
@@ -1075,7 +1075,7 @@ const documentation = `
 ]</code></pre></div>
             </div></div>
         </div>
-        
+
         <div class="accordion-item">
             <div class="accordion-header" onclick="toggleAccordion(this)"><div class="accordion-title"><span class="method get">GET</span><code>/report/error_cause</code><span class="description">Total count per error cause.</span></div><div class="accordion-toggle">+</div></div>
             <div class="accordion-content"><div class="accordion-content-inner">
@@ -1087,7 +1087,7 @@ const documentation = `
 ]</code></pre></div>
             </div></div>
         </div>
-        
+
         <div class="accordion-item">
             <div class="accordion-header" onclick="toggleAccordion(this)"><div class="accordion-title"><span class="method get">GET</span><code>/report/app_version</code><span class="description">Total count per application version.</span></div><div class="accordion-toggle">+</div></div>
             <div class="accordion-content"><div class="accordion-content-inner">
@@ -1222,9 +1222,9 @@ const documentation = `
         </div>
       </div>
     </div>
-    
+
   </div>
-  
+
   <footer>
     <p>Riyales | &copy; <span id="copyright-year"></span> Aurum</p>
   </footer>
@@ -1234,7 +1234,7 @@ const documentation = `
         document.getElementById('copyright-year').textContent = new Date().getFullYear();
         document.body.classList.add('dark');
     });
-    
+
     function switchTab(tabElement, tabId) {
       const parentCard = tabElement.closest('.card');
       if (!parentCard) return;
@@ -1248,18 +1248,18 @@ const documentation = `
       }
       tabElement.classList.add('active');
     }
-    
+
     function copyCode(button) {
       const codeBlock = button.parentElement;
       if (!codeBlock) return;
       const code = codeBlock.querySelector('code');
       if (!code) return;
-      
+
       navigator.clipboard.writeText(code.innerText).then(() => {
         const originalText = button.textContent;
         button.textContent = 'Copied!';
         button.style.color = 'var(--method-get)';
-        
+
         setTimeout(() => {
           button.textContent = originalText;
           button.style.color = 'white';
@@ -1325,13 +1325,13 @@ const statsPage = `
       --accent-magenta: rgb(255, 64, 255);
       --accent-emerald: rgb(0, 208, 132);
     }
-    
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
-    
+
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', Helvetica, Arial, sans-serif;
       background-color: var(--bg-color-dark);
@@ -1341,13 +1341,13 @@ const statsPage = `
       margin: 0;
       font-weight: 300;
     }
-    
+
     .container {
       max-width: 1300px;
       margin: 0 auto;
       padding: 2rem;
     }
-    
+
     h2 {
       font-size: 1.8rem;
       margin: 2rem 0 1rem;
@@ -1356,21 +1356,21 @@ const statsPage = `
       font-weight: 500;
       letter-spacing: -0.02em;
     }
-    
+
     h3 {
       font-size: 1.25rem;
       margin: 1.5rem 0 0.75rem;
       font-weight: 500;
       letter-spacing: -0.02em;
     }
-    
+
     .dashboard-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
       gap: 1.5rem;
       margin-bottom: 3rem;
     }
-    
+
     .chart-card {
       border-radius: 24px;
       background: var(--card-bg-dark);
@@ -1384,38 +1384,38 @@ const statsPage = `
       flex-direction: column;
       min-height: 350px;
     }
-    
+
     .chart-card:hover {
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.05), 
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.05),
                   0 0 30px rgba(255, 255, 255, 0.03),
                   inset 0 0 15px rgba(255, 255, 255, 0.03);
       border: 1px solid rgba(255, 255, 255, 0.12);
     }
-    
+
     .chart-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 1.5rem;
     }
-    
+
     .chart-title {
       font-size: 1.1rem;
       font-weight: 400;
     }
-    
+
     .chart-container {
       flex: 1;
       position: relative;
       height: 250px;
       transition: height 0.4s ease;
     }
-    
+
     .toggle-buttons {
       display: flex;
       gap: 0.5rem;
     }
-    
+
     .toggle-button {
       background: rgba(255, 255, 255, 0.05);
       border: none;
@@ -1426,16 +1426,16 @@ const statsPage = `
       cursor: pointer;
       transition: background-color 0.2s, box-shadow 0.2s;
     }
-    
+
     .toggle-button:hover {
       background: rgba(255, 255, 255, 0.1);
     }
-    
+
     .toggle-button.active {
       background: var(--primary-color-dark);
       box-shadow: 0 0 10px rgba(0, 120, 255, 0.5);
     }
-    
+
     .loading-overlay {
       position: fixed;
       top: 0;
@@ -1449,7 +1449,7 @@ const statsPage = `
       z-index: 1000;
       backdrop-filter: blur(8px);
     }
-    
+
     .loading-spinner {
       width: 50px;
       height: 50px;
@@ -1458,11 +1458,11 @@ const statsPage = `
       border-top-color: var(--primary-color-dark);
       animation: spin 0.8s ease-in-out infinite;
     }
-    
+
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
-    
+
     .error-message {
       background: rgba(255, 59, 48, 0.1);
       color: var(--accent-red);
@@ -1471,7 +1471,7 @@ const statsPage = `
       margin: 1rem 0;
       border-left: 3px solid var(--accent-red);
     }
-    
+
     .api-key-form {
       max-width: 500px;
       margin: 4rem auto;
@@ -1483,13 +1483,13 @@ const statsPage = `
       -webkit-backdrop-filter: blur(25px);
       box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
     }
-    
+
     .api-key-form p {
       margin-bottom: 1.5rem;
       color: var(--secondary-color-dark);
     }
-    
-    #apiKeyInput {
+
+    input[type="text"] {
       width: 100%;
       background: rgba(0, 0, 0, 0.3);
       border: 1px solid rgba(255, 255, 255, 0.1);
@@ -1500,13 +1500,13 @@ const statsPage = `
       margin-bottom: 1.5rem;
       transition: all 0.2s ease;
     }
-    
-    #apiKeyInput:focus {
+
+    input[type="text"]:focus {
       outline: none;
       border-color: rgba(0, 120, 255, 0.4);
       box-shadow: 0 0 0 2px rgba(0, 120, 255, 0.1);
     }
-    
+
     button {
       width: 100%;
       background: var(--primary-color-dark);
@@ -1520,19 +1520,19 @@ const statsPage = `
       transition: all 0.2s ease;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.1);
     }
-    
+
     button:hover {
       background: rgb(10, 132, 255);
       box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.1),
                   0 0 15px rgba(10, 132, 255, 0.3);
       transform: translateY(-1px);
     }
-    
+
     button:active {
       transform: translateY(1px);
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
-    
+
     .section-header {
       display: flex;
       justify-content: space-between;
@@ -1540,14 +1540,14 @@ const statsPage = `
       margin-bottom: 1.5rem;
       color: var(--secondary-color-dark);
     }
-    
+
     footer {
       text-align: center;
       padding: 2rem 0;
       color: var(--secondary-color-dark);
       font-size: 0.9rem;
     }
-    
+
     @media (max-width: 768px) {
       .container {
         padding: 1rem;
@@ -1559,7 +1559,7 @@ const statsPage = `
         padding: 1.5rem;
       }
     }
-    
+
     .no-data-card {
       grid-column: 1 / -1;
       background: rgba(29, 29, 31, 0.5);
@@ -1572,7 +1572,7 @@ const statsPage = `
       backdrop-filter: blur(15px);
       -webkit-backdrop-filter: blur(15px);
     }
-    
+
     body.login-view {
       display: flex;
       flex-direction: column;
@@ -1591,7 +1591,7 @@ const statsPage = `
     body.login-view footer {
        flex-shrink: 0;
     }
-    
+
     #apiKeyInput {
       font-family: 'SF Mono', SFMono-Regular, ui-monospace, monospace;
     }
@@ -1602,7 +1602,7 @@ const statsPage = `
     #eventTrackingGrid .chart-card, #errorReportingGrid .chart-card {
         aspect-ratio: 1 / 1;
     }
-    
+
     .no-data-in-card {
         display: flex;
         align-items: center;
@@ -1627,7 +1627,7 @@ const statsPage = `
       font-size: 0.875rem;
       min-width: 150px;
     }
-    
+
     #chartjs-tooltip table {
         width: 100%;
         border-collapse: collapse;
@@ -1647,7 +1647,7 @@ const statsPage = `
             grid-template-columns: repeat(2, 1fr);
         }
     }
-    
+
     #snackbar {
       visibility: hidden;
       min-width: 250px;
@@ -1680,31 +1680,45 @@ const statsPage = `
     <div id="apiKeySection" class="api-key-form">
       <h3>Enter Your API Key</h3>
       <p>Enter your reporting API key to access analytics data.</p>
-      <input type="password" id="apiKeyInput" placeholder="RYLS-" value="RYLS-" autofocus>
+      <input type="text" id="apiKeyInput" placeholder="RYLS-" value="RYLS-" autofocus>
       <button id="loadDataButton">Load Dashboard</button>
     </div>
-    
+
     <div id="dashboardContent" style="display: none;">
       <h2>Device Metrics</h2>
       <div class="section-header">
         <p>Overview of device types, operating systems, and hardware specs.</p>
       </div>
-      
+
       <div class="dashboard-grid" id="deviceMetricsGrid">
-        <!-- OS Combined Chart -->
+        <!-- OS Name Chart -->
         <div class="chart-card">
           <div class="chart-header">
             <div class="chart-title">Operating System Distribution</div>
             <div class="toggle-buttons">
-              <button class="toggle-button active" data-chart-type="bar" data-target="osCombinedChart">Bar</button>
-              <button class="toggle-button" data-chart-type="pie" data-target="osCombinedChart">Pie</button>
+              <button class="toggle-button active" data-chart-type="bar" data-target="osNameChart">Bar</button>
+              <button class="toggle-button" data-chart-type="pie" data-target="osNameChart">Pie</button>
             </div>
           </div>
           <div class="chart-container">
-            <canvas id="osCombinedChart"></canvas>
+            <canvas id="osNameChart"></canvas>
           </div>
         </div>
-        
+
+        <!-- OS Version Chart -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title">OS Version Distribution</div>
+            <div class="toggle-buttons">
+              <button class="toggle-button active" data-chart-type="bar" data-target="osVersionChart">Bar</button>
+              <button class="toggle-button" data-chart-type="pie" data-target="osVersionChart">Pie</button>
+            </div>
+          </div>
+          <div class="chart-container">
+            <canvas id="osVersionChart"></canvas>
+          </div>
+        </div>
+
         <!-- Device Brand Chart -->
         <div class="chart-card">
           <div class="chart-header">
@@ -1718,7 +1732,7 @@ const statsPage = `
             <canvas id="deviceBrandChart"></canvas>
           </div>
         </div>
-        
+
         <!-- Device Type Chart -->
         <div class="chart-card">
           <div class="chart-header">
@@ -1732,7 +1746,7 @@ const statsPage = `
             <canvas id="deviceTypeChart"></canvas>
           </div>
         </div>
-        
+
         <!-- Network Type Chart -->
         <div class="chart-card">
           <div class="chart-header">
@@ -1746,7 +1760,7 @@ const statsPage = `
             <canvas id="networkTypeChart"></canvas>
           </div>
         </div>
-        
+
         <!-- Push Notification Chart -->
         <div class="chart-card">
           <div class="chart-header">
@@ -1761,21 +1775,21 @@ const statsPage = `
           </div>
         </div>
       </div>
-      
+
       <h2>Event Tracking</h2>
       <div class="section-header">
         <p>Analysis of user interactions and events within the application.</p>
       </div>
-      
+
       <div class="dashboard-grid" id="eventTrackingGrid">
         <!-- Event Type Charts will be added dynamically -->
       </div>
-      
+
       <h2>Error Reporting</h2>
       <div class="section-header">
         <p>Overview of application errors and crash reports.</p>
       </div>
-      
+
       <div class="dashboard-grid" id="errorReportingGrid">
         <!-- Error Code Chart -->
         <div class="chart-card">
@@ -1790,7 +1804,7 @@ const statsPage = `
             <canvas id="errorCodeChart"></canvas>
           </div>
         </div>
-        
+
         <!-- Error Cause Chart -->
         <div class="chart-card">
           <div class="chart-header">
@@ -1804,7 +1818,7 @@ const statsPage = `
             <canvas id="errorCauseChart"></canvas>
           </div>
         </div>
-        
+
         <!-- App Version Chart -->
         <div class="chart-card">
           <div class="chart-header">
@@ -1821,11 +1835,11 @@ const statsPage = `
       </div>
     </div>
   </div>
-  
+
   <div id="loadingOverlay" class="loading-overlay" style="display: none;">
     <div class="loading-spinner"></div>
   </div>
-  
+
   <div id="snackbar"></div>
 
   <footer>
@@ -1847,7 +1861,7 @@ const statsPage = `
         });
       }
     });
-    
+
     function formatLabel(str) {
       if (!str && typeof str !== 'boolean') return 'Unknown';
       if (typeof str === 'boolean') return str ? 'Enabled' : 'Disabled';
@@ -1858,7 +1872,7 @@ const statsPage = `
         .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
         .join(' ');
     }
-    
+
     // Chart colors - Expanded vibrant colors palette
     const chartColors = [
       'rgb(10, 116, 255)',  // blue
@@ -1906,7 +1920,7 @@ const statsPage = `
         if (titleLines.length > 0) {
             innerHtml += '<thead><tr><th>' + titleLines.join(' ') + '</th></tr></thead>';
         }
-        
+
         innerHtml += '<tbody>';
         bodyLines.forEach(function(body, i) {
             const dataPoint = tooltip.dataPoints[i];
@@ -1936,28 +1950,28 @@ const statsPage = `
       tooltipEl.style.left = left + 'px';
       tooltipEl.style.top = top + 'px';
     };
-    
+
     // Chart instances
     const charts = {};
-    
+
     // Toggle chart type buttons
     document.querySelectorAll('.toggle-button').forEach(button => {
       button.addEventListener('click', () => {
         const chartType = button.getAttribute('data-chart-type');
         const targetChart = button.getAttribute('data-target');
         const chartGroup = button.closest('.toggle-buttons');
-        
+
         // Update active state
         chartGroup.querySelectorAll('.toggle-button').forEach(btn => {
           btn.classList.remove('active');
         });
         button.classList.add('active');
-        
+
         // Update chart type
         updateChartType(targetChart, chartType);
       });
     });
-    
+
     // Load data button
     document.getElementById('loadDataButton').addEventListener('click', () => {
       const apiKey = document.getElementById('apiKeyInput').value.trim();
@@ -1965,14 +1979,14 @@ const statsPage = `
         showSnackBar('Please enter an API key');
         return;
       }
-      
+
       loadDashboardData(apiKey);
     });
-    
+
     // Function to load all dashboard data
     async function loadDashboardData(apiKey) {
       showLoading(true);
-      
+
       try {
         // Fetch all data in parallel
         const results = await Promise.all([
@@ -1990,7 +2004,7 @@ const statsPage = `
             errorCauseData,
             appVersionData
         ] = results;
-        
+
         // If all requests failed, it's very likely the API key is invalid.
         if (results.every(r => r === null)) {
             throw new Error('Invalid API Key');
@@ -2000,10 +2014,10 @@ const statsPage = `
         document.body.classList.remove('login-view');
         document.getElementById('apiKeySection').style.display = 'none';
         document.getElementById('dashboardContent').style.display = 'block';
-        
+
         // Initialize charts with data, only if data is available
         if (combinedData) initializeCharts(combinedData);
-        
+
         if (eventTypeData && eventTypeData.length > 0) {
           await initializeEventCharts(eventTypeData);
         } else {
@@ -2011,7 +2025,7 @@ const statsPage = `
         }
 
         initializeErrorCharts(errorCodeData, errorCauseData, appVersionData);
-        
+
       } catch (error) {
         if (error.message === 'Invalid API Key') {
             showSnackBar('Invalid API Key. Please try again.');
@@ -2019,7 +2033,7 @@ const statsPage = `
             showSnackBar('Failed to load dashboard. Check connection.');
             console.error('Dashboard error:', error);
         }
-        
+
         // Reset to login view
         document.body.classList.add('login-view');
         document.getElementById('apiKeySection').style.display = 'block';
@@ -2028,7 +2042,7 @@ const statsPage = `
         showLoading(false);
       }
     }
-    
+
     // Fetch data from API
     async function fetchData(endpoint, apiKey) {
       const response = await fetch(endpoint, {
@@ -2036,26 +2050,36 @@ const statsPage = `
           'X-API-Key': apiKey
         }
       });
-      
+
       if (!response.ok) {
         throw new Error(\`API request failed: \${response.status} \${response.statusText}\`);
       }
-      
+
       return await response.json();
     }
-    
+
     // Initialize device metrics charts
     function initializeCharts(data) {
-      // OS Combined Chart
-      createChart('osCombinedChart', 'bar', {
-        labels: data.os_combined.map(item => formatLabel(item.os_combined)),
+      // OS Name Chart
+      createChart('osNameChart', 'bar', {
+        labels: data.os_name.map(item => formatLabel(item.os_name)),
         datasets: [{
           label: 'Count',
-          data: data.os_combined.map(item => item.count),
+          data: data.os_name.map(item => item.count),
           backgroundColor: chartColors
         }]
       });
-      
+
+      // OS Version Chart
+      createChart('osVersionChart', 'bar', {
+        labels: data.os_version.map(item => formatLabel(item.os_version)),
+        datasets: [{
+          label: 'Count',
+          data: data.os_version.map(item => item.count),
+          backgroundColor: chartColors
+        }]
+      });
+
       // Device Brand Chart
       createChart('deviceBrandChart', 'bar', {
         labels: data.device_brand.map(item => formatLabel(item.device_brand)),
@@ -2065,7 +2089,7 @@ const statsPage = `
           backgroundColor: chartColors
         }]
       });
-      
+
       // Device Type Chart
       createChart('deviceTypeChart', 'bar', {
         labels: data.device_type.map(item => formatLabel(item.device_type)),
@@ -2075,7 +2099,7 @@ const statsPage = `
           backgroundColor: chartColors
         }]
       });
-      
+
       // Network Type Chart
       createChart('networkTypeChart', 'bar', {
         labels: data.network_type.map(item => formatLabel(item.network_type)),
@@ -2085,7 +2109,7 @@ const statsPage = `
           backgroundColor: chartColors
         }]
       });
-      
+
       // Push Notification Chart
       createChart('pushNotificationChart', 'bar', {
         labels: data.push_notification_enabled.map(item => formatLabel(item.enabled)),
@@ -2096,7 +2120,7 @@ const statsPage = `
         }]
       });
     }
-    
+
     // Initialize event tracking charts
     async function initializeEventCharts(data) {
       const eventTrackingGrid = document.getElementById('eventTrackingGrid');
@@ -2110,11 +2134,11 @@ const statsPage = `
         const canvasId = 'eventChart_' + i;
         const chartCard = document.createElement('div');
         chartCard.className = 'chart-card';
-        
+
         const chartTitle = formatLabel(eventType) + ' Events';
-        
+
         // Create the card structure
-        chartCard.innerHTML = 
+        chartCard.innerHTML =
           '<div class="chart-header">' +
             '<div class="chart-title">' + chartTitle + '</div>' +
             '<div class="toggle-buttons">' +
@@ -2125,16 +2149,16 @@ const statsPage = `
           '<div class="chart-container">' +
             '<canvas id="' + canvasId + '"></canvas>' +
           '</div>';
-        
+
         eventTrackingGrid.appendChild(chartCard);
-        
+
         // Add event listeners for chart type toggle
         chartCard.querySelectorAll('.toggle-button').forEach(button => {
           button.addEventListener('click', () => {
             const chartType = button.getAttribute('data-chart-type');
             const targetChart = button.getAttribute('data-target');
             const chartGroup = button.closest('.toggle-buttons');
-            
+
             chartGroup.querySelectorAll('.toggle-button').forEach(btn => btn.classList.remove('active'));
             button.classList.add('active');
             updateChartType(targetChart, chartType);
@@ -2152,11 +2176,11 @@ const statsPage = `
           if (keyMap[eventType]) {
             try {
               const detailData = await fetchData('/report/event_detail?type=' + eventType + '&key=' + keyMap[eventType], apiKey);
-              
+
               if (detailData && detailData.length > 0) {
                 // Update chart title
                 chartCard.querySelector('.chart-title').textContent = formatLabel(eventType) + ' Distribution';
-                
+
                 // Create chart
                 createChart(canvasId, 'bar', {
                   labels: detailData.map(item => formatLabel(item.value)),
@@ -2190,7 +2214,7 @@ const statsPage = `
         }
       }
     }
-    
+
     // Initialize error reporting charts
     function initializeErrorCharts(errorCodeData, errorCauseData, appVersionData) {
       const setupErrorChart = (canvasId, data, titleKey) => {
@@ -2218,19 +2242,19 @@ const statsPage = `
       setupErrorChart('errorCauseChart', errorCauseData, 'error_cause');
       setupErrorChart('appVersionChart', appVersionData, 'app_version');
     }
-    
+
     // Create a chart
     function createChart(canvasId, type, data) {
       const canvas = document.getElementById(canvasId);
       if (!canvas) return;
-      
+
       const ctx = canvas.getContext('2d');
-      
+
       // Destroy existing chart if it exists
       if (charts[canvasId]) {
         charts[canvasId].destroy();
       }
-      
+
       // Create new chart
       charts[canvasId] = new Chart(ctx, {
         type: type,
@@ -2305,49 +2329,49 @@ const statsPage = `
           } : undefined
         }
       });
-      
+
     }
-    
+
     // Update chart type with smooth transition
     function updateChartType(chartId, newType) {
       const chart = charts[chartId];
       if (!chart) return;
-      
+
       const container = document.getElementById(chartId).closest('.chart-container');
       const data = chart.data;
-      
+
       // First, fade out the chart
       container.style.opacity = '0.5';
-      
+
       // After a short delay, destroy and recreate the chart
       setTimeout(() => {
         // Destroy existing chart
         chart.destroy();
-        
+
         // Re-assign the full color palette for the new chart type
         data.datasets[0].backgroundColor = chartColors;
 
         createChart(chartId, newType, data);
-        
+
         // Adjust container height for pie charts
         if (newType === 'pie') {
           container.style.height = '280px';
         } else {
           container.style.height = '250px';
         }
-        
+
         // Fade the chart back in
         setTimeout(() => {
           container.style.opacity = '1';
         }, 100);
       }, 150);
     }
-    
+
     function capitalizeFirstLetter(string) {
       if (!string) return '';
       return string.charAt(0).toUpperCase() + string.slice(1);
     }
-    
+
     // Show/hide loading overlay
     function showLoading(show) {
       document.getElementById('loadingOverlay').style.display = show ? 'flex' : 'none';
@@ -2366,395 +2390,455 @@ const statsPage = `
 `;
 
 async function handleRequest(request: Request, env: Env): Promise<Response> {
-    const url = new URL(request.url);
-    const method = request.method;
+	const url = new URL(request.url);
+	const method = request.method;
 
-  // Serve stats page
-  if (method === 'GET' && url.pathname === '/stats') {
-    return new Response(statsPage, {
-      status: 200,
-      headers: { 'Content-Type': 'text/html' },
-    });
-  }
+	// Serve stats page
+	if (method === 'GET' && url.pathname === '/stats') {
+		return new Response(statsPage, {
+			status: 200,
+			headers: { 'Content-Type': 'text/html' },
+		});
+	}
 
-    // Serve documentation
-    if (method === 'GET' && (url.pathname === '/documentation' || (url.pathname === '/report' && !request.headers.get('X-API-Key')))) {
-        return new Response(documentation, {
-            status: 200,
-            headers: { 'Content-Type': 'text/html' },
-        });
-    }
+	// Serve documentation
+	if (method === 'GET' && (url.pathname === '/documentation' || (url.pathname === '/report' && !request.headers.get('X-API-Key')))) {
+		return new Response(documentation, {
+			status: 200,
+			headers: { 'Content-Type': 'text/html' },
+		});
+	}
 
-    // Validate API Key
-    const apiKey = request.headers.get('X-API-Key');
-    if (!apiKey) {
-      return new Response(JSON.stringify({ error: 'API Key required' }), { status: 403 });
-    }
+	// Validate API Key
+	const apiKey = request.headers.get('X-API-Key');
+	if (!apiKey) {
+		return new Response(JSON.stringify({ error: 'API Key required' }), { status: 403 });
+	}
 
-    // Handle root endpoint
-    if (method === 'GET' && url.pathname === '/') {
-      return new Response(JSON.stringify({ message: 'Welcome to Riyales auth service.' }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
+	// Handle root endpoint
+	if (method === 'GET' && url.pathname === '/') {
+		return new Response(JSON.stringify({ message: 'Welcome to Riyales auth service.' }), {
+			status: 200,
+			headers: { 'Content-Type': 'application/json' },
+		});
+	}
 
-    // Handle /report endpoints
-    if (url.pathname.startsWith('/report')) {
-    if (apiKey !== 'RYLS-0009') { // Use the specific API key
-        return new Response(JSON.stringify({ error: 'Invalid API Key for report' }), { status: 403 });
-      }
-      if (method === 'GET') {
-        return await handleReport(request, env);
-      }
-    }
+	// Handle /report endpoints
+	if (url.pathname.startsWith('/report')) {
+		if (apiKey !== 'RYLS-0009') {
+			// Use the specific API key
+			return new Response(JSON.stringify({ error: 'Invalid API Key for report' }), { status: 403 });
+		}
+		if (method === 'GET') {
+			return await handleReport(request, env);
+		}
+	}
 
-    // Handle /device, /event, /error endpoints
-    const uuidRegex = /^RYLS-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-    if (!uuidRegex.test(apiKey)) {
-      // Don't return error if it's a report endpoint, as that's already handled
-      if (!url.pathname.startsWith('/report')) {
-           return new Response(JSON.stringify({ error: 'Invalid API Key format' }), { status: 403 });
-      }
-    }
+	// Handle /device, /event, /error endpoints
+	const uuidRegex = /^RYLS-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+	if (!uuidRegex.test(apiKey)) {
+		// Don't return error if it's a report endpoint, as that's already handled
+		if (!url.pathname.startsWith('/report')) {
+			return new Response(JSON.stringify({ error: 'Invalid API Key format' }), { status: 403 });
+		}
+	}
 
-    if (method === 'POST') {
-      try {
-        const body = await request.json();
-        if (url.pathname === '/device') {
-          return await handleDeviceInfo(request, env, body);
-        } else if (url.pathname === '/event') {
-          return await handleEvent(request, env, body);
-        } else if (url.pathname === '/error') {
-          return await handleError(request, env, body);
-        }
-      } catch (error) {
-        const err = error as Error;
-        return new Response(JSON.stringify({ error: 'Invalid request', details: err.message }), {
-          status: 400,
-        });
-      }
-    }
+	if (method === 'POST') {
+		try {
+			const body = await request.json();
+			if (url.pathname === '/device') {
+				return await handleDeviceInfo(request, env, body);
+			} else if (url.pathname === '/event') {
+				return await handleEvent(request, env, body);
+			} else if (url.pathname === '/error') {
+				return await handleError(request, env, body);
+			}
+		} catch (error) {
+			const err = error as Error;
+			return new Response(JSON.stringify({ error: 'Invalid request', details: err.message }), {
+				status: 400,
+			});
+		}
+	}
 
-    return new Response(JSON.stringify({ error: 'Method Not Allowed or Invalid Endpoint' }), { status: 405 });
+	return new Response(JSON.stringify({ error: 'Method Not Allowed or Invalid Endpoint' }), { status: 405 });
 }
 
 export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
-    // Handle CORS preflight requests
-    if (request.method === 'OPTIONS') {
-      return new Response(null, {
-        status: 204,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-          'Access-Control-Allow-Headers': 'X-API-Key, Content-Type, User-Agent',
-        },
-      });
-    }
+	async fetch(request: Request, env: Env): Promise<Response> {
+		// Handle CORS preflight requests
+		if (request.method === 'OPTIONS') {
+			return new Response(null, {
+				status: 204,
+				headers: {
+					'Access-Control-Allow-Origin': '*',
+					'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+					'Access-Control-Allow-Headers': 'X-API-Key, Content-Type, User-Agent',
+				},
+			});
+		}
 
-    // Handle actual requests
-    const response = await handleRequest(request, env);
+		// Handle actual requests
+		const response = await handleRequest(request, env);
 
-    // Add CORS headers to the response
-    const newResponse = new Response(response.body, response);
-    newResponse.headers.set('Access-Control-Allow-Origin', '*');
+		// Add CORS headers to the response
+		const newResponse = new Response(response.body, response);
+		newResponse.headers.set('Access-Control-Allow-Origin', '*');
 
-    return newResponse;
-  },
+		return newResponse;
+	},
 };
 
 async function handleDeviceInfo(request: Request, env: Env, body: any): Promise<Response> {
-  const userAgent = request.headers.get('User-Agent') || 'Unknown';
-  const parser = new UAParser(userAgent);
+	const userAgent = request.headers.get('User-Agent') || 'Unknown';
+	const parser = new UAParser(userAgent);
 
-  // Get OS name and version separately
-  const osName = body.os_name || parser.getOS().name || 'Unknown';
-  const osVersion = body.os_version || parser.getOS().version || 'Unknown';
-  
-  // Combine OS name and version into a single field
-  const os_combined = `${osName} ${osVersion}`.trim();
+	// Get OS name and version separately
+	const osName = body.os_name || parser.getOS().name || 'Unknown';
+	const osVersion = body.os_version || parser.getOS().version || 'Unknown';
 
-  const data = {
-    os_combined: os_combined,
-    device_type: body.device_type || parser.getDevice().type || 'Unknown',
-    device_model: body.device_model || parser.getDevice().model || 'Unknown',
-    device_brand: body.device_brand || parser.getDevice().vendor || 'Unknown',
-    network_type: body.network_type || 'Unknown',
-    device_language: body.device_language || 'Unknown',
-    push_notification_enabled: body.push_notification_enabled ? 1 : 0,
-    install_date: body.install_timestamp ? new Date(body.install_timestamp).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
-  };
+	// Combine OS name and version into a single field
+	const os_combined = `${osName} ${osVersion}`.trim();
 
-  try {
-    // Try to increment count if combination exists
-    const result = await env.DB.prepare(`
+	const data = {
+		os_combined: os_combined,
+		device_type: body.device_type || parser.getDevice().type || 'Unknown',
+		device_model: body.device_model || parser.getDevice().model || 'Unknown',
+		device_brand: body.device_brand || parser.getDevice().vendor || 'Unknown',
+		network_type: body.network_type || 'Unknown',
+		device_language: body.device_language || 'Unknown',
+		push_notification_enabled: body.push_notification_enabled ? 1 : 0,
+		install_date: body.install_timestamp
+			? new Date(body.install_timestamp).toISOString().split('T')[0]
+			: new Date().toISOString().split('T')[0],
+	};
+
+	try {
+		// Try to increment count if combination exists
+		const result = await env.DB.prepare(
+			`
       UPDATE device_stats
       SET count = count + 1
       WHERE os_combined = ? AND device_type = ? AND device_model = ?
             AND device_brand = ? AND network_type = ? AND device_language = ?
             AND push_notification_enabled = ? AND install_date = ?
       RETURNING count
-    `)
-      .bind(
-        data.os_combined, data.device_type, data.device_model,
-        data.device_brand, data.network_type, data.device_language,
-        data.push_notification_enabled, data.install_date
-      )
-      .first();
+    `,
+		)
+			.bind(
+				data.os_combined,
+				data.device_type,
+				data.device_model,
+				data.device_brand,
+				data.network_type,
+				data.device_language,
+				data.push_notification_enabled,
+				data.install_date,
+			)
+			.first();
 
-    if (!result) {
-      // Insert new combination with count = 1
-      await env.DB.prepare(`
+		if (!result) {
+			// Insert new combination with count = 1
+			await env.DB.prepare(
+				`
         INSERT INTO device_stats (
           os_combined, device_type, device_model, device_brand,
           network_type, device_language, push_notification_enabled, install_date, count
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)
-      `)
-        .bind(
-          data.os_combined, data.device_type, data.device_model,
-          data.device_brand, data.network_type, data.device_language,
-          data.push_notification_enabled, data.install_date
-        )
-        .run();
-    }
-    return new Response(JSON.stringify({ message: 'Device stats updated' }), { status: 200 });
-  } catch (error) {
-    const err = error as Error;
-    return new Response(JSON.stringify({ error: 'Failed to update stats', details: err.message }), { status: 500 });
-  }
+      `,
+			)
+				.bind(
+					data.os_combined,
+					data.device_type,
+					data.device_model,
+					data.device_brand,
+					data.network_type,
+					data.device_language,
+					data.push_notification_enabled,
+					data.install_date,
+				)
+				.run();
+		}
+		return new Response(JSON.stringify({ message: 'Device stats updated' }), { status: 200 });
+	} catch (error) {
+		const err = error as Error;
+		return new Response(JSON.stringify({ error: 'Failed to update stats', details: err.message }), { status: 500 });
+	}
 }
 
 interface AppEvent {
-  event_type: string;
-  event_data?: string;
-  count?: number;
+	event_type: string;
+	event_data?: string;
+	count?: number;
 }
 
 async function handleEvent(request: Request, env: Env, body: any): Promise<Response> {
-  // Support both single event and batch event array
-  const events: AppEvent[] = Array.isArray(body)
-    ? body
-    : (body.events && Array.isArray(body.events) ? body.events : [body]);
+	// Support both single event and batch event array
+	const events: AppEvent[] = Array.isArray(body) ? body : body.events && Array.isArray(body.events) ? body.events : [body];
 
-  // Validate all events
-  for (const event of events) {
-    if (!event.event_type) {
-      return new Response(JSON.stringify({ error: 'Missing event_type in one of the events' }), { status: 400 });
-    }
-  }
+	// Validate all events
+	for (const event of events) {
+		if (!event.event_type) {
+			return new Response(JSON.stringify({ error: 'Missing event_type in one of the events' }), { status: 400 });
+		}
+	}
 
-  try {
-    const stmt = env.DB.prepare(`
+	try {
+		const stmt = env.DB.prepare(`
       INSERT INTO event_stats (event_type, event_data, count)
       VALUES (?, ?, ?)
       ON CONFLICT(event_type, event_data) DO UPDATE SET count = count + excluded.count
     `);
-    
-    const insertions = events.map((event: AppEvent) => {
-        const eventType = event.event_type || 'Unknown';
-        const eventData = event.event_data || '{}';
-        const count = typeof event.count === 'number' && event.count > 0 ? event.count : 1;
-        return stmt.bind(eventType, eventData, count);
-    });
 
-    if (insertions.length > 0) {
-        await env.DB.batch(insertions);
-    }
-    
-    return new Response(JSON.stringify({ message: 'Event(s) stats updated' }), { status: 200 });
-  } catch (error) {
-    const err = error as Error;
-    console.error("Failed to update event stats:", err);
-    return new Response(JSON.stringify({ error: 'Failed to update stats', details: err.message }), { status: 500 });
-  }
+		const insertions = events.map((event: AppEvent) => {
+			const eventType = event.event_type || 'Unknown';
+			const eventData = event.event_data || '{}';
+			const count = typeof event.count === 'number' && event.count > 0 ? event.count : 1;
+			return stmt.bind(eventType, eventData, count);
+		});
+
+		if (insertions.length > 0) {
+			await env.DB.batch(insertions);
+		}
+
+		return new Response(JSON.stringify({ message: 'Event(s) stats updated' }), { status: 200 });
+	} catch (error) {
+		const err = error as Error;
+		console.error('Failed to update event stats:', err);
+		return new Response(JSON.stringify({ error: 'Failed to update stats', details: err.message }), { status: 500 });
+	}
 }
 
 interface AppError {
-  error_message?: string;
-  error_cause?: string;
-  error_code?: string;
-  timestamp?: string;
-  os_name?: string;
-  os_version?: string;
-  device_model?: string;
-  device_brand?: string;
-  app_version?: string;
-  stack_trace?: string;
+	error_message?: string;
+	error_cause?: string;
+	error_code?: string;
+	timestamp?: string;
+	os_name?: string;
+	os_version?: string;
+	device_model?: string;
+	device_brand?: string;
+	app_version?: string;
+	stack_trace?: string;
 }
 
 async function handleError(request: Request, env: Env, body: any): Promise<Response> {
-  const errors = Array.isArray(body) ? body : (body.errors && Array.isArray(body.errors) ? body.errors : [body]);
+	const errors = Array.isArray(body) ? body : body.errors && Array.isArray(body.errors) ? body.errors : [body];
 
-  try {
-    const stmts = errors.map((error: AppError) => {
-      const data = {
-        error_message: error.error_message || 'Unknown error',
-        error_cause: error.error_cause || 'Unknown cause',
-        error_code: error.error_code || 'Unknown',
-        timestamp: error.timestamp || new Date().toISOString(),
-        os_name: error.os_name || 'Unknown',
-        os_version: error.os_version || 'Unknown',
-        device_model: error.device_model || 'Unknown',
-        device_brand: error.device_brand || 'Unknown',
-        app_version: error.app_version || 'Unknown',
-        stack_trace: error.stack_trace || 'No stack trace provided',
-      };
-      return env.DB.prepare(`
+	try {
+		const stmts = errors.map((error: AppError) => {
+			const data = {
+				error_message: error.error_message || 'Unknown error',
+				error_cause: error.error_cause || 'Unknown cause',
+				error_code: error.error_code || 'Unknown',
+				timestamp: error.timestamp || new Date().toISOString(),
+				os_name: error.os_name || 'Unknown',
+				os_version: error.os_version || 'Unknown',
+				device_model: error.device_model || 'Unknown',
+				device_brand: error.device_brand || 'Unknown',
+				app_version: error.app_version || 'Unknown',
+				stack_trace: error.stack_trace || 'No stack trace provided',
+			};
+			return env.DB.prepare(
+				`
       INSERT INTO app_errors (
         error_message, error_cause, error_code, timestamp, os_name, os_version,
         device_model, device_brand, app_version, stack_trace
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `)
-      .bind(
-        data.error_message, data.error_cause, data.error_code, data.timestamp,
-        data.os_name, data.os_version, data.device_model, data.device_brand,
-        data.app_version, data.stack_trace
-        );
-    });
+    `,
+			).bind(
+				data.error_message,
+				data.error_cause,
+				data.error_code,
+				data.timestamp,
+				data.os_name,
+				data.os_version,
+				data.device_model,
+				data.device_brand,
+				data.app_version,
+				data.stack_trace,
+			);
+		});
 
-    if (stmts.length > 0) {
-      await env.DB.batch(stmts);
-    }
-    
-    return new Response(JSON.stringify({ message: 'Error(s) logged' }), { status: 200 });
-  } catch (error) {
-    const err = error as Error;
-    return new Response(JSON.stringify({ error: 'Failed to log error(s)', details: err.message }), { status: 500 });
-  }
+		if (stmts.length > 0) {
+			await env.DB.batch(stmts);
+		}
+
+		return new Response(JSON.stringify({ message: 'Error(s) logged' }), { status: 200 });
+	} catch (error) {
+		const err = error as Error;
+		return new Response(JSON.stringify({ error: 'Failed to log error(s)', details: err.message }), { status: 500 });
+	}
 }
 
 async function handleReport(request: Request, env: Env): Promise<Response> {
-  const { pathname, searchParams } = new URL(request.url);
-  try {
-        if (pathname === '/report/event_detail') {
-            const eventType = searchParams.get('type');
-            const eventKey = searchParams.get('key');
-            
-            if (!eventType || !eventKey) {
-                return new Response(JSON.stringify({ error: 'Missing type or key parameter' }), { status: 400 });
-            }
+	const { pathname, searchParams } = new URL(request.url);
+	try {
+		if (pathname === '/report/event_detail') {
+			const eventType = searchParams.get('type');
+			const eventKey = searchParams.get('key');
 
-            const query = `
-                SELECT 
-                    json_extract(event_data, '$.' || ?) as value, 
+			if (!eventType || !eventKey) {
+				return new Response(JSON.stringify({ error: 'Missing type or key parameter' }), { status: 400 });
+			}
+
+			const query = `
+                SELECT
+                    json_extract(event_data, '$.' || ?) as value,
                     SUM(count) AS count
                 FROM event_stats
                 WHERE event_type = ? AND json_valid(event_data) = 1
                 GROUP BY value
                 HAVING value IS NOT NULL;
             `;
-            
-            const { results } = await env.DB.prepare(query).bind(eventKey, eventType).all();
-            
-            return new Response(JSON.stringify(results), { 
-                status: 200, 
-                headers: { 'Content-Type': 'application/json' } 
-            });
-        }
 
-    if (pathname === '/report/os_combined') {
-      const { results } = await env.DB.prepare('SELECT os_combined, SUM(count) AS count FROM device_stats GROUP BY os_combined').all();
-      return new Response(JSON.stringify(results), { status: 200, headers: { 'Content-Type': 'application/json' } });
-    } else if (pathname === '/report/device_brand') {
-      const { results } = await env.DB.prepare('SELECT device_brand, SUM(count) AS count FROM device_stats GROUP BY device_brand').all();
-      return new Response(JSON.stringify(results), { status: 200, headers: { 'Content-Type': 'application/json' } });
-    } else if (pathname === '/report/network_type') {
-      const { results } = await env.DB.prepare('SELECT network_type, SUM(count) AS count FROM device_stats GROUP BY network_type').all();
-      return new Response(JSON.stringify(results), { status: 200, headers: { 'Content-Type': 'application/json' } });
-    } else if (pathname === '/report/event_type') {
-        const { results } = await env.DB.prepare('SELECT event_type, SUM(count) as count FROM event_stats GROUP BY event_type').all();
-        return new Response(JSON.stringify(results), { status: 200, headers: { 'Content-Type': 'application/json' } });
-        } else if (pathname === '/report/error_code') {
-            const { results } = await env.DB.prepare('SELECT error_code, COUNT(*) as count FROM app_errors GROUP BY error_code').all();
-            return new Response(JSON.stringify(results), { status: 200, headers: { 'Content-Type': 'application/json' } });
-        } else if (pathname === '/report/error_cause') {
-            const { results } = await env.DB.prepare('SELECT error_cause, COUNT(*) as count FROM app_errors GROUP BY error_cause').all();
-        return new Response(JSON.stringify(results), { status: 200, headers: { 'Content-Type': 'application/json' } });
-    } else if (pathname === '/report/app_version') {
-        const { results } = await env.DB.prepare('SELECT app_version, COUNT(*) as count FROM app_errors GROUP BY app_version').all();
-        return new Response(JSON.stringify(results), { status: 200, headers: { 'Content-Type': 'application/json' } });
-    } else if (pathname === '/report/combined') {
-       const [
-            os_combined, device_type, device_model, device_brand,
-            network_type, device_language, push_notification_enabled, install_date
-        ] = await Promise.all([
-            env.DB.prepare('SELECT os_combined, SUM(count) as count FROM device_stats GROUP BY os_combined').all(),
-            env.DB.prepare('SELECT device_type, SUM(count) as count FROM device_stats GROUP BY device_type').all(),
-            env.DB.prepare('SELECT device_model, SUM(count) as count FROM device_stats GROUP BY device_model').all(),
-            env.DB.prepare('SELECT device_brand, SUM(count) as count FROM device_stats GROUP BY device_brand').all(),
-            env.DB.prepare('SELECT network_type, SUM(count) as count FROM device_stats GROUP BY network_type').all(),
-            env.DB.prepare('SELECT device_language, SUM(count) as count FROM device_stats GROUP BY device_language').all(),
-            env.DB.prepare('SELECT push_notification_enabled, SUM(count) as count FROM device_stats GROUP BY push_notification_enabled').all(),
-            env.DB.prepare('SELECT install_date, SUM(count) as count FROM device_stats GROUP BY install_date').all()
-        ]);
+			const { results } = await env.DB.prepare(query).bind(eventKey, eventType).all();
 
-        const response = {
-            os_combined: os_combined.results,
-            device_type: device_type.results,
-            device_model: device_model.results,
-            device_brand: device_brand.results,
-            network_type: network_type.results,
-            device_language: device_language.results,
-            push_notification_enabled: push_notification_enabled.results.map((r: any) => ({ enabled: r.push_notification_enabled === 1, count: r.count })),
-            install_date: install_date.results,
-        };
-        return new Response(JSON.stringify(response), { status: 200, headers: { 'Content-Type': 'application/json' } });
-    } else if (pathname === '/report/devices') {
-        const allowedFilters = ['os_name', 'os_version', 'device_type', 'device_model', 'device_brand', 'network_type', 'device_language', 'push_notification_enabled', 'install_date'];
-        const filters = [];
-            const bindings: any[] = [];
-        for (const [key, value] of searchParams.entries()) {
-            if (allowedFilters.includes(key)) {
-                filters.push(`${key} = ?`);
-                bindings.push(value);
-            }
-        }
-        let query = 'SELECT * FROM device_stats';
-        if (filters.length > 0) {
-            query += ' WHERE ' + filters.join(' AND ');
-        }
-            const { results } = await (env.DB.prepare(query) as any).bind(...bindings).all();
-        return new Response(JSON.stringify(results), { status: 200, headers: { 'Content-Type': 'application/json' } });
-    } else if (pathname === '/report/events') {
-        const allowedFilters = ['event_type', 'event_data'];
-        const filters = [];
-            const bindings: any[] = [];
-        for (const [key, value] of searchParams.entries()) {
-            if (allowedFilters.includes(key)) {
-                filters.push(`${key} = ?`);
-                bindings.push(value);
-            }
-        }
-        let query = 'SELECT * FROM event_stats';
-        if (filters.length > 0) {
-            query += ' WHERE ' + filters.join(' AND ');
-        }
-            const { results } = await (env.DB.prepare(query) as any).bind(...bindings).all();
-        return new Response(JSON.stringify(results), { status: 200, headers: { 'Content-Type': 'application/json' } });
-    } else if (pathname === '/report/errors') {
-      const allowedFilters = ['error_message', 'error_cause', 'error_code', 'os_name', 'os_version', 'device_model', 'device_brand', 'app_version'];
-      const filters = [];
-          const bindings: any[] = [];
-      for (const [key, value] of searchParams.entries()) {
-          if (allowedFilters.includes(key)) {
-              filters.push(`${key} = ?`);
-              bindings.push(value);
-          }
-      }
-      let query = 'SELECT * FROM app_errors';
-      if (filters.length > 0) {
-          query += ' WHERE ' + filters.join(' AND ');
-      }
-          const { results } = await (env.DB.prepare(query) as any).bind(...bindings).all();
-      return new Response(JSON.stringify(results), { status: 200, headers: { 'Content-Type': 'application/json' } });
-    } else {
-      return new Response(JSON.stringify({ 
-        error: 'Invalid report endpoint',
-      }), { status: 404, headers: { 'Content-Type': 'application/json' } });
-    }
-  } catch (error) {
-    const err = error as Error;
-    return new Response(JSON.stringify({ error: 'Failed to fetch data', details: err.message }), { status: 500 });
-  }
+			return new Response(JSON.stringify(results), {
+				status: 200,
+				headers: { 'Content-Type': 'application/json' },
+			});
+		}
+
+		if (pathname === '/report/os_name') {
+			const { results } = await env.DB.prepare('SELECT os_name, SUM(count) AS count FROM device_stats GROUP BY os_name').all();
+			return new Response(JSON.stringify(results), { status: 200, headers: { 'Content-Type': 'application/json' } });
+		} else if (pathname === '/report/os_version') {
+			const { results } = await env.DB.prepare('SELECT os_version, SUM(count) AS count FROM device_stats GROUP BY os_version').all();
+			return new Response(JSON.stringify(results), { status: 200, headers: { 'Content-Type': 'application/json' } });
+		} else if (pathname === '/report/device_brand') {
+			const { results } = await env.DB.prepare('SELECT device_brand, SUM(count) AS count FROM device_stats GROUP BY device_brand').all();
+			return new Response(JSON.stringify(results), { status: 200, headers: { 'Content-Type': 'application/json' } });
+		} else if (pathname === '/report/network_type') {
+			const { results } = await env.DB.prepare('SELECT network_type, SUM(count) AS count FROM device_stats GROUP BY network_type').all();
+			return new Response(JSON.stringify(results), { status: 200, headers: { 'Content-Type': 'application/json' } });
+		} else if (pathname === '/report/event_type') {
+			const { results } = await env.DB.prepare('SELECT event_type, SUM(count) as count FROM event_stats GROUP BY event_type').all();
+			return new Response(JSON.stringify(results), { status: 200, headers: { 'Content-Type': 'application/json' } });
+		} else if (pathname === '/report/error_code') {
+			const { results } = await env.DB.prepare('SELECT error_code, COUNT(*) as count FROM app_errors GROUP BY error_code').all();
+			return new Response(JSON.stringify(results), { status: 200, headers: { 'Content-Type': 'application/json' } });
+		} else if (pathname === '/report/error_cause') {
+			const { results } = await env.DB.prepare('SELECT error_cause, COUNT(*) as count FROM app_errors GROUP BY error_cause').all();
+			return new Response(JSON.stringify(results), { status: 200, headers: { 'Content-Type': 'application/json' } });
+		} else if (pathname === '/report/app_version') {
+			const { results } = await env.DB.prepare('SELECT app_version, COUNT(*) as count FROM app_errors GROUP BY app_version').all();
+			return new Response(JSON.stringify(results), { status: 200, headers: { 'Content-Type': 'application/json' } });
+		} else if (pathname === '/report/combined') {
+			const [
+				os_name,
+				os_version,
+				device_type,
+				device_model,
+				device_brand,
+				network_type,
+				device_language,
+				push_notification_enabled,
+				install_date,
+			] = await Promise.all([
+				env.DB.prepare('SELECT os_name, SUM(count) as count FROM device_stats GROUP BY os_name').all(),
+				env.DB.prepare('SELECT os_version, SUM(count) as count FROM device_stats GROUP BY os_version').all(),
+				env.DB.prepare('SELECT device_type, SUM(count) as count FROM device_stats GROUP BY device_type').all(),
+				env.DB.prepare('SELECT device_model, SUM(count) as count FROM device_stats GROUP BY device_model').all(),
+				env.DB.prepare('SELECT device_brand, SUM(count) as count FROM device_stats GROUP BY device_brand').all(),
+				env.DB.prepare('SELECT network_type, SUM(count) as count FROM device_stats GROUP BY network_type').all(),
+				env.DB.prepare('SELECT device_language, SUM(count) as count FROM device_stats GROUP BY device_language').all(),
+				env.DB.prepare('SELECT push_notification_enabled, SUM(count) as count FROM device_stats GROUP BY push_notification_enabled').all(),
+				env.DB.prepare('SELECT install_date, SUM(count) as count FROM device_stats GROUP BY install_date').all(),
+			]);
+
+			const response = {
+				os_name: os_name.results,
+				os_version: os_version.results,
+				device_type: device_type.results,
+				device_model: device_model.results,
+				device_brand: device_brand.results,
+				network_type: network_type.results,
+				device_language: device_language.results,
+				push_notification_enabled: push_notification_enabled.results.map((r: any) => ({
+					enabled: r.push_notification_enabled === 1,
+					count: r.count,
+				})),
+				install_date: install_date.results,
+			};
+			return new Response(JSON.stringify(response), { status: 200, headers: { 'Content-Type': 'application/json' } });
+		} else if (pathname === '/report/devices') {
+			const allowedFilters = [
+				'os_name',
+				'os_version',
+				'device_type',
+				'device_model',
+				'device_brand',
+				'network_type',
+				'device_language',
+				'push_notification_enabled',
+				'install_date',
+			];
+			const filters = [];
+			const bindings: any[] = [];
+			for (const [key, value] of searchParams.entries()) {
+				if (allowedFilters.includes(key)) {
+					filters.push(`${key} = ?`);
+					bindings.push(value);
+				}
+			}
+			let query = 'SELECT * FROM device_stats';
+			if (filters.length > 0) {
+				query += ' WHERE ' + filters.join(' AND ');
+			}
+			const { results } = await (env.DB.prepare(query) as any).bind(...bindings).all();
+			return new Response(JSON.stringify(results), { status: 200, headers: { 'Content-Type': 'application/json' } });
+		} else if (pathname === '/report/events') {
+			const allowedFilters = ['event_type', 'event_data'];
+			const filters = [];
+			const bindings: any[] = [];
+			for (const [key, value] of searchParams.entries()) {
+				if (allowedFilters.includes(key)) {
+					filters.push(`${key} = ?`);
+					bindings.push(value);
+				}
+			}
+			let query = 'SELECT * FROM event_stats';
+			if (filters.length > 0) {
+				query += ' WHERE ' + filters.join(' AND ');
+			}
+			const { results } = await (env.DB.prepare(query) as any).bind(...bindings).all();
+			return new Response(JSON.stringify(results), { status: 200, headers: { 'Content-Type': 'application/json' } });
+		} else if (pathname === '/report/errors') {
+			const allowedFilters = [
+				'error_message',
+				'error_cause',
+				'error_code',
+				'os_name',
+				'os_version',
+				'device_model',
+				'device_brand',
+				'app_version',
+			];
+			const filters = [];
+			const bindings: any[] = [];
+			for (const [key, value] of searchParams.entries()) {
+				if (allowedFilters.includes(key)) {
+					filters.push(`${key} = ?`);
+					bindings.push(value);
+				}
+			}
+			let query = 'SELECT * FROM app_errors';
+			if (filters.length > 0) {
+				query += ' WHERE ' + filters.join(' AND ');
+			}
+			const { results } = await (env.DB.prepare(query) as any).bind(...bindings).all();
+			return new Response(JSON.stringify(results), { status: 200, headers: { 'Content-Type': 'application/json' } });
+		} else {
+			return new Response(
+				JSON.stringify({
+					error: 'Invalid report endpoint',
+				}),
+				{ status: 404, headers: { 'Content-Type': 'application/json' } },
+			);
+		}
+	} catch (error) {
+		const err = error as Error;
+		return new Response(JSON.stringify({ error: 'Failed to fetch data', details: err.message }), { status: 500 });
+	}
 }
